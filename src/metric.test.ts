@@ -16,7 +16,7 @@ describe('Metrics', function () {
   })
 
   describe('#get1', function () {
-    it('should get empty array on non existing group', function () {
+    it('Should get empty array on non existing group', function () {
       dbMet.get1("0", function (err: Error | null, result?: Metric[]) {
         expect(err).to.be.null
         expect(result).to.not.be.undefined
@@ -26,24 +26,61 @@ describe('Metrics', function () {
   })
 
   describe('#save',function(){
-      it('should save date',function(){
+      it('Should save data',function(){
           var met: Metric[]=[]
           met.push(new Metric("121213",10))
           dbMet.save(1,met,(err: Error | null) => {
             if (err) throw err
             dbMet.get1(1, function (err: Error | null, result: Metric[]) {
-                console.log("gfdvc")
-                console.log(result)
               expect(err).to.be.null
               expect(result).to.not.be.empty
               expect(result).to.not.be.undefined
               if (result){
-              expect(result[0].value).to.equal(15)}
+              expect(result[0].value).to.equal(10)}
             })
           })
-          
       })
+      it('Should update data',function(){
+        var met: Metric[]=[]
+        met.push(new Metric("121213",15))
+        dbMet.save(1,met,(err: Error | null) => {
+          if (err) throw err
+          dbMet.get1(1, function (err: Error | null, result: Metric[]) {
+            expect(err).to.be.null
+            expect(result).to.not.be.empty
+            expect(result).to.not.be.undefined
+            if (result){
+            expect(result[0].value).to.equal(15)}
+          })
+        })
+    })
   })
 
+  describe('#delete',function(){
+    it('Should delete data',function(){
+        var met: Metric[]=[]
+        met.push(new Metric("121213",10))
+        dbMet.delete(1,met,(err: Error | null) => {
+          if (err) throw err
+          dbMet.get1(1, function (err: Error | null, result: Metric[]) {
+            expect(err).to.be.null
+            expect(result).to.be.empty
+          })
+        })
+    })
+    /*it('Should update data',function(){
+      var met: Metric[]=[]
+      met.push(new Metric("121213",15))
+      dbMet.save(1,met,(err: Error | null) => {
+        if (err) throw err
+        dbMet.get1(1, function (err: Error | null, result: Metric[]) {
+          expect(err).to.be.null
+          expect(result).to.not.be.empty
+          expect(result).to.not.be.undefined
+          if (result){
+          expect(result[0].value).to.equal(15)}
+        })
+      })*/
+  })
 })
 
