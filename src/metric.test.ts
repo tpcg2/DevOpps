@@ -11,22 +11,23 @@ describe('Metrics', function () {
     dbMet = new MetricsHandler(dbPath)
   })
 
-  after(function () {
+  /* after(function () {
     dbMet.closeDB()
-  })
+  })*/
 
   describe('#get1', function () {
-    it('Should get empty array on non existing group', function () {
+    it('Should get empty array on non existing group', function (next) {
       dbMet.get1("0", function (err: Error | null, result?: Metric[]) {
         expect(err).to.be.null
         expect(result).to.not.be.undefined
         expect(result).to.be.empty
+        next()
       })
     })
   })
 
   describe('#save',function(){
-      it('Should save data',function(){
+      it('Should save data',function(next){
           var met: Metric[]=[]
           met.push(new Metric("121213",10))
           dbMet.save(1,met,(err: Error | null) => {
@@ -36,11 +37,13 @@ describe('Metrics', function () {
               expect(result).to.not.be.empty
               expect(result).to.not.be.undefined
               if (result){
-              expect(result[0].value).to.equal(10)}
+                expect(result[0].value).to.equal(10)
+                next()
+              }
             })
           })
       })
-      it('Should update data',function(){
+      it('Should update data',function(next){
         var met: Metric[]=[]
         met.push(new Metric("121213",15))
         dbMet.save(1,met,(err: Error | null) => {
@@ -50,37 +53,45 @@ describe('Metrics', function () {
             expect(result).to.not.be.empty
             expect(result).to.not.be.undefined
             if (result){
-            expect(result[0].value).to.equal(15)}
+              expect(result[0].value).to.equal(15)
+              next()
+            }
           })
         })
     })
   })
 
   describe('#delete',function(){
-    it('Should delete data',function(){
-        var met: Metric[]=[]
-        met.push(new Metric("121213",10))
+    it('Should delete data',function(next){
+      var met: Metric[]=[]
+      met.push(new Metric("121213",10))
+      dbMet.save(1,met,(err: Error | null) => {
+        if (err) throw err
         dbMet.delete(1,met,(err: Error | null) => {
           if (err) throw err
           dbMet.get1(1, function (err: Error | null, result: Metric[]) {
             expect(err).to.be.null
             expect(result).to.be.empty
+            next()
           })
         })
+      })
+      
     })
-    /*it('Should update data',function(){
+    it('Should not fail if data does not exist',function(next){
       var met: Metric[]=[]
-      met.push(new Metric("121213",15))
+      met.push(new Metric("121213",10))
       dbMet.save(1,met,(err: Error | null) => {
         if (err) throw err
-        dbMet.get1(1, function (err: Error | null, result: Metric[]) {
-          expect(err).to.be.null
-          expect(result).to.not.be.empty
-          expect(result).to.not.be.undefined
-          if (result){
-          expect(result[0].value).to.equal(15)}
+        dbMet.delete(2,met,(err: Error | null) => {
+          expect(err).to.be.undefined
+          next()
         })
-      })*/
+      })
+      
+    })
   })
+
+  
 })
 
