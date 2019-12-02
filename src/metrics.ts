@@ -19,6 +19,10 @@ export class MetricsHandler {
     this.db = LevelDB.open(dbPath)
   }
 
+  public closeDB(){
+    this.db.close()
+  }
+
   public save(key: number, metrics: Metric[], callback: (error: Error | null) => void) {
     const stream = WriteStream(this.db)
     stream.on('error', callback)

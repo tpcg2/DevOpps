@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "./node_modules/.bin/mocha -r ts-node/register src/**/*.test.ts",
     "start": "./node_modules/.bin/ts-node src/server.ts",
     "build": "./node_modules/.bin/tsc -p tsconfig.json",
     "dev": "./node_modules/.bin/nodemon "
@@ -13,9 +13,13 @@
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.19.0",
+    "del": "^5.1.0",
     "ejs": "^2.7.4",
     "encoding-down": "^6.3.0",
     "express": "^4.17.1",
+    "express-session": "^1.17.0",
+    "level": "^6.0.0",
+    "level-session-store": "^2.2.0",
     "level-ws": "^2.0.0",
     "leveldown": "^5.4.1",
     "levelup": "^4.3.2",
